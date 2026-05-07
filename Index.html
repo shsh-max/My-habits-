@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="عاداتي ٢٠٢٦">
+<meta name="theme-color" content="#7a4030">
+<title>متتبع العادات ٢٠٢٦</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<script>
+const manifestData = {
+  name: "متتبع العادات ٢٠٢٦",short_name:"عاداتي",display:"standalone",background_color:"#fdf6ee",theme_color:"#7a4030",
+  icons:[{src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='40' fill='%237a4030'/><text y='130' x='50%' font-size='110' text-anchor='middle'>🌸</text></svg>",sizes:"192x192",type:"image/svg+xml"}]
+};
+const blob=new Blob([JSON.stringify(manifestData)],{type:'application/json'});
+const link=document.createElement('link');link.rel='manifest';link.href=URL.createObjectURL(blob);document.head.appendChild(link);
+</script>
+<style>
+:root{--cream:#fdf6ee;--warm:#f5ebe0;--blush:#e8c9b0;--rose:#c97b5a;--deep:#7a4030;--gold:#c9a84c;--text:#3d2b1f;--muted:#9c7b6b;--green:#6a9e6e;--red:#c25a5a}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Tajawal',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;padding:16px;padding-top:env(safe-area-inset-top,16px);padding-bottom:env(safe-area-inset-bottom,16px);background-image:radial-gradient(circle at 20% 20%,#f0e6d8 0%,transparent 50%),radial-gradient(circle at 80% 80%,#e8d5c4 0%,transparent 50%)}
+.page{max-width:980px;margin:0 auto}
+.install-banner{background:linear-gradient(135deg,var(--deep),#a0523a);color:white;border-radius:16px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 16px rgba(122,64,48,.3)}
+.install-banner.hidden{display:none}.install-icon{font-size:2rem;flex-shrink:0}.install-text{flex:1}
+.install-text strong{display:block;font-size:.95rem;font-weight:700;margin-bottom:3px}.install-text span{font-size:.78rem;opacity:.85;line-height:1.5}
+.install-close{background:rgba(255,255,255,.2);border:none;color:white;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+header{text-align:center;padding:28px 0 18px}.header-deco{font-size:12px;letter-spacing:4px;color:var(--muted);margin-bottom:8px}
+h1{font-size:2.2rem;font-weight:800;color:var(--deep);margin-bottom:4px}.subtitle{color:var(--muted);font-size:.9rem;font-weight:300;margin-bottom:18px}
+.month-nav{display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:22px;flex-wrap:wrap}
+.month-btn{background:var(--warm);border:1.5px solid var(--blush);color:var(--deep);padding:6px 12px;border-radius:20px;font-family:'Tajawal',sans-serif;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .2s}
+.month-btn:hover{background:var(--blush)}.month-btn.active{background:var(--deep);color:white;border-color:var(--deep)}
+.current-month-header{text-align:center;margin-bottom:18px}
+.month-badge{display:inline-block;background:var(--deep);color:white;padding:7px 24px;border-radius:20px;font-size:.92rem;font-weight:700}
+.save-status{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:16px;font-size:.76rem;color:var(--muted)}
+.save-dot{width:8px;height:8px;border-radius:50%;background:var(--green)}.save-dot.saving{background:var(--gold);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.add-section{display:flex;justify-content:flex-end;margin-bottom:14px}
+.add-btn{background:var(--rose);color:white;border:none;padding:9px 20px;border-radius:20px;font-family:'Tajawal',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .2s}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(61,43,31,.5);z-index:100;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}.modal{background:white;border-radius:20px;padding:26px;width:100%;max-width:460px;box-shadow:0 20px 60px rgba(0,0,0,.2);max-height:90vh;overflow-y:auto}
+.modal h3{font-size:1.15rem;font-weight:700;color:var(--deep);margin-bottom:18px}.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:.83rem;font-weight:600;color:var(--muted);margin-bottom:5px}
+.form-group input,.form-group select{width:100%;padding:10px 14px;border:1.5px solid var(--blush);border-radius:10px;font-family:'Tajawal',sans-serif;font-size:.9rem;color:var(--text);background:var(--cream);outline:none}
+.emoji-picker{display:flex;flex-wrap:wrap;gap:7px;margin-top:7px}.emoji-opt{width:36px;height:36px;border:1.5px solid var(--blush);border-radius:8px;cursor:pointer;font-size:1.15rem;display:flex;align-items:center;justify-content:center}
+.emoji-opt.selected{border-color:var(--rose);background:#fdeee8}.modal-btns{display:flex;gap:10px;margin-top:18px;justify-content:flex-end}
+.btn-cancel{background:var(--warm);color:var(--muted);border:none;padding:9px 20px;border-radius:12px;font-family:'Tajawal',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer}
+.btn-save{background:var(--rose);color:white;border:none;padding:9px 22px;border-radius:12px;font-family:'Tajawal',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer}
+.main-grid{display:grid;grid-template-columns:190px repeat(4,1fr);gap:0;margin-bottom:12px}
+.week-header{background:var(--deep);color:white;text-align:center;padding:9px 5px;font-size:.78rem;font-weight:700;line-height:1.5}
+.week-header:first-child{border-radius:14px 0 0 14px;text-align:right;padding-right:14px}.week-header:last-child{border-radius:0 14px 14px 0}
+.week-header .dates{font-size:.64rem;font-weight:400;opacity:.8;display:block;margin-top:2px}
+.day-label-row{display:grid;grid-template-columns:190px repeat(4,1fr);gap:0;margin-bottom:10px}
+.day-label-cell{background:#faf5f0;padding:4px;display:flex;justify-content:center;gap:2px;flex-wrap:wrap}
+.day-label-cell:first-child{border-radius:8px 0 0 8px;background:transparent}.day-label-cell:last-child{border-radius:0 8px 8px 0}
+.dlabel{text-align:center}.dlabel .dnum{font-size:.57rem;color:var(--muted);font-weight:600;display:block}.dlabel .dname{font-size:.49rem;color:#c4a08a;display:block}
+.category{margin-bottom:20px}.cat-label{display:inline-flex;align-items:center;gap:8px;background:var(--warm);border:1px solid var(--blush);border-radius:20px;padding:4px 14px;font-size:.78rem;font-weight:700;color:var(--rose);margin-bottom:8px}
+.habit-row{display:grid;grid-template-columns:190px repeat(4,1fr) 30px;gap:0;margin-bottom:4px;border-radius:12px;overflow:hidden;box-shadow:0 2px 6px rgba(122,64,48,.06)}
+.habit-name{background:white;padding:10px 12px;font-size:.84rem;font-weight:500;display:flex;align-items:center;gap:7px;border-left:1px solid #f0e6dc;cursor:pointer}
+.edit-hint{font-size:.62rem;color:var(--blush);margin-right:auto}.habit-icon{font-size:1.05rem;flex-shrink:0}
+.week-cell{background:white;padding:8px 4px 6px;text-align:center;border-left:1px solid #f0e6dc;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+.check-boxes{display:flex;gap:2px;flex-wrap:wrap;justify-content:center}
+.cb{width:13px;height:13px;border:1.5px solid var(--blush);border-radius:3px;cursor:pointer;flex-shrink:0;position:relative}
+.cb.checked{background:var(--rose);border-color:var(--rose)}.cb.checked::after{content:'✓';position:absolute;color:white;font-size:8px;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:700}
+.week-days-label{font-size:.59rem;color:var(--muted)}.del-cell{background:white;display:flex;align-items:center;justify-content:center;border-left:1px solid #f0e6dc}
+.del-btn{width:20px;height:20px;border-radius:50%;border:none;background:transparent;color:#ddc0b0;font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.progress-section{background:white;border-radius:20px;padding:22px;margin-top:22px;box-shadow:0 4px 20px rgba(122,64,48,.08)}
+.progress-title{font-size:.98rem;font-weight:700;color:var(--deep);margin-bottom:14px}
+.prog-item{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.prog-label{font-size:.78rem;color:var(--text);width:155px;flex-shrink:0;text-align:right}
+.prog-track{flex:1;height:7px;background:var(--warm);border-radius:4px;overflow:hidden}
+.prog-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--rose),var(--gold));transition:width .5s}
+.prog-pct{font-size:.74rem;font-weight:700;color:var(--rose);width:32px;text-align:left}
+.quote-box{text-align:center;padding:22px 16px 8px;color:var(--muted);font-size:.84rem;font-style:italic;line-height:1.9}
+@media(max-width:600px){h1{font-size:1.7rem}.main-grid,.habit-row,.day-label-row{grid-template-columns:105px repeat(4,1fr) 26px}.habit-name{font-size:.7rem;padding:8px 6px}.cb{width:11px;height:11px}.month-btn{padding:5px 9px;font-size:.74rem}}
+</style>
+</head>
+<body>
+<div class="page">
+<div class="install-banner" id="installBanner">
+<div class="install-icon">📲</div>
+<div class="install-text"><strong>ثبّتي التطبيق على الأيباد!</strong><span>اضغطي على زر المشاركة ثم "إضافة إلى الشاشة الرئيسية"</span></div>
+<button class="install-close" onclick="document.getElementById('installBanner').classList.add('hidden');localStorage.setItem('banner_dismissed','1')">✕</button>
+</div>
+<header><div class="header-deco">✦ رحلة التطوير الذاتي ✦</div><h1>متتبع العادات</h1><p class="subtitle">٢٠٢٦ — سنة التغيير الحقيقي 🌸</p></header>
+<div class="month-nav" id="monthNav"></div>
+<div class="current-month-header"><div class="month-badge" id="monthBadge"></div></div>
+<div class="save-status"><div class="save-dot" id="saveDot"></div><span id="saveText">تم الحفظ تلقائياً ✓</span></div>
+<div class="add-section"><button class="add-btn" onclick="openModal()">＋ إضافة عادة جديدة</button></div>
+<div class="main-grid" id="weekHeaders"><div class="week-header" style="border-radius:14px 0 0 14px;text-align:right;padding-right:14px;">العادة</div></div>
+<div class="day-label-row" id="dayLabels"><div class="day-label-cell" style="background:transparent;border-radius:8px 0 0 8px;"></div></div>
+<div id="habitsContainer"></div>
+<div class="progress-section"><div class="progress-title">📊 تقدمي هذا الشهر</div><div id="progressBars"></div></div>
+<div class="quote-box">"النجاح ليس نهائياً، والفشل ليس قاتلاً — الشجاعة على الاستمرار هي ما يهم" 🌸</div>
+</div>
+<div class="modal-overlay" id="modalOverlay">
+<div class="modal">
+<h3 id="modalTitle">إضافة عادة جديدة</h3>
+<div class="form-group"><label>اسم العادة</label><input type="text" id="habitNameInput" placeholder="مثال: المشي يومياً"></div>
+<div class="form-group"><label>الفئة</label><select id="habitCatInput"><option value="morning">🌅 روتين الصباح</option><option value="spiritual">📖 الروحانيات</option><option value="fitness">🏋️ الصحة واللياقة</option><option value="evening">🌙 الروتين المسائي</option><option value="other">⭐ أخرى</option></select></div>
+<div class="form-group"><label>الأيام المستهدفة أسبوعياً</label><select id="habitDaysInput"><option value="3">٣ أيام</option><option value="4">٤ أيام</option><option value="5">٥ أيام</option><option value="6">٦ أيام</option><option value="7" selected>كل يوم (٧)</option></select></div>
+<div class="form-group"><label>الأيكون</label><div class="emoji-picker" id="emojiPicker"></div></div>
+<div class="modal-btns"><button class="btn-cancel" onclick="closeModal()">إلغاء</button><button class="btn-save" onclick="saveHabit()">حفظ</button></div>
+</div>
+</div>
+<script>
+if(localStorage.getItem('banner_dismissed'))document.getElementById('installBanner').classList.add('hidden');
+const MONTHS=[{name:'يناير',en:'jan',days:31,start:4},{name:'فبراير',en:'feb',days:28,start:0},{name:'مارس',en:'mar',days:31,start:0},{name:'أبريل',en:'apr',days:30,start:3},{name:'مايو',en:'may',days:31,start:5},{name:'يونيو',en:'jun',days:30,start:1},{name:'يوليو',en:'jul',days:31,start:3},{name:'أغسطس',en:'aug',days:31,start:6},{name:'سبتمبر',en:'sep',days:30,start:2},{name:'أكتوبر',en:'oct',days:31,start:4},{name:'نوفمبر',en:'nov',days:30,start:0},{name:'ديسمبر',en:'dec',days:31,start:2}];
+const DAY_NAMES=['أحد','إث','ثل','أرب','خم','جم','سب'];
+const AR=['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+const toAr=n=>String(n).split('').map(d=>AR[+d]||d).join('');
+const CATEGORIES={morning:'🌅 روتين الصباح',spiritual:'📖 الروحانيات',fitness:'🏋️ الصحة واللياقة',evening:'🌙 الروتين المسائي',other:'⭐ أخرى'};
+const EMOJIS=['⏰','💧','🍽️','🕌','🏃‍♀️','🪢','✨','🏠','📚','🧘‍♀️','🚶‍♀️','🎯','💪','🌿','🛏️','📝','🎨','🎵','🍎','☀️'];
+const DEFAULT_HABITS=[{id:'wake',name:'الاستيقاظ ١٠ صباحاً',icon:'⏰',cat:'morning',daysPerWeek:7},{id:'water',name:'شرب كمية كافية من الماء',icon:'💧',cat:'morning',daysPerWeek:7},{id:'fasting',name:'الصيام المتقطع',icon:'🍽️',cat:'morning',daysPerWeek:5},{id:'quran',name:'قراءة القرآن',icon:'🕌',cat:'spiritual',daysPerWeek:7},{id:'sport',name:'الرياضة واللياقة',icon:'🏃‍♀️',cat:'fitness',daysPerWeek:3},{id:'jumprope',name:'القفز على الحبل',icon:'🪢',cat:'fitness',daysPerWeek:3},{id:'skincare',name:'العناية المسائية بالبشرة',icon:'✨',cat:'evening',daysPerWeek:7},{id:'clean',name:'تنظيف المنزل مسائياً',icon:'🏠',cat:'evening',daysPerWeek:7},{id:'read',name:'قراءة الكتاب',icon:'📚',cat:'evening',daysPerWeek:4}];
+let currentMonth=4,habits=[],checks={},editingId=null,selectedEmoji='⭐',saveTimer=null;
+function loadData(){try{const h=localStorage.getItem('habits_2026'),c=localStorage.getItem('checks_2026');habits=h?JSON.parse(h):JSON.parse(JSON.stringify(DEFAULT_HABITS));checks=c?JSON.parse(c):{}}catch(e){habits=JSON.parse(JSON.stringify(DEFAULT_HABITS));checks={}}}
+function saveData(){const dot=document.getElementById('saveDot'),txt=document.getElementById('saveText');dot.className='save-dot saving';txt.textContent='جارٍ الحفظ...';clearTimeout(saveTimer);saveTimer=setTimeout(()=>{localStorage.setItem('habits_2026',JSON.stringify(habits));localStorage.setItem('checks_2026',JSON.stringify(checks));dot.className='save-dot';txt.textContent='تم الحفظ تلقائياً ✓'},500)}
+function getWeeks(mIdx){const m=MONTHS[mIdx];let firstSun=m.start===0?1:8-m.start;const weeks=[];for(let w=0;w<4;w++){const wk=[];for(let d=0;d<7;d++){const day=firstSun+w*7+d;if(day<=m.days)wk.push(day)}if(wk.length)weeks.push(wk)}return weeks}
+function getCheck(hId,wIdx,dIdx){const mk=MONTHS[currentMonth].en;return checks[mk]?.[hId]?.[wIdx]?.[dIdx]||false}
+function setCheck(hId,wIdx,dIdx,val){const mk=MONTHS[currentMonth].en;if(!checks[mk])checks[mk]={};if(!checks[mk][hId])checks[mk][hId]={};if(!checks[mk][hId][wIdx])checks[mk][hId][wIdx]={};checks[mk][hId][wIdx][dIdx]=val;saveData()}
+function renderMonthNav(){const nav=document.getElementById('monthNav');nav.innerHTML='';MONTHS.forEach((m,i)=>{const btn=document.createElement('button');btn.className='month-btn'+(i===currentMonth?' active':'');btn.textContent=m.name;btn.onclick=()=>{currentMonth=i;renderAll()};nav.appendChild(btn)})}
+function renderWeekHeaders(){const m=MONTHS[currentMonth],weeks=getWeeks(currentMonth),wh=document.getElementById('weekHeaders'),dl=document.getElementById('dayLabels');wh.innerHTML='<div class="week-header" style="border-radius:14px 0 0 14px;text-align:right;padding-right:14px;">العادة</div>';dl.innerHTML='<div class="day-label-cell" style="background:transparent;border-radius:8px 0 0 8px;"></div>';weeks.forEach((wk,i)=>{const d=document.createElement('div');d.className='week-header';if(i===weeks.length-1)d.style.borderRadius='0 14px 14px 0';d.innerHTML=`الأسبوع ${toAr(i+1)}<span class="dates">أحد ${toAr(wk[0])} — ${DAY_NAMES[wk.length-1]} ${toAr(wk[wk.length-1])} ${m.name}</span>`;wh.appendChild(d);const cell=document.createElement('div');cell.className='day-label-cell';if(i===weeks.length-1)cell.style.borderRadius='0 8px 8px 0';wk.forEach((day,di)=>{const div=document.createElement('div');div.className='dlabel';div.innerHTML=`<span class="dnum">${toAr(day)}</span><span class="dname">${DAY_NAMES[di]}</span>`;cell.appendChild(div)});dl.appendChild(cell)});const dh=document.createElement('div');dh.style.cssText='background:var(--deep);width:30px;';wh.appendChild(dh);const dd=document.createElement('div');dd.style.cssText='background:#faf5f0;border-radius:0 8px 8px 0;width:30px;';dl.appendChild(dd)}
+function renderHabits(){const container=document.getElementById('habitsContainer');container.innerHTML='';const weeks=getWeeks(currentMonth);['morning','spiritual','fitness','evening','other'].forEach(cat=>{const catHabits=habits.filter(h=>h.cat===cat);if(!catHabits.length)return;const catDiv=document.createElement('div');catDiv.className='category';catDiv.innerHTML=`<div class="cat-label">${CATEGORIES[cat]}</div>`;catHabits.forEach(habit=>{const row=document.createElement('div');row.className='habit-row';const nameCell=document.createElement('div');nameCell.className='habit-name';nameCell.innerHTML=`<span class="habit-icon">${habit.icon}</span>${habit.name}<span class="edit-hint">✏️</span>`;nameCell.onclick=()=>openModal(habit.id);row.appendChild(nameCell);weeks.forEach((wk,wIdx)=>{const cell=document.createElement('div');cell.className='week-cell';const boxes=document.createElement('div');boxes.className='check-boxes';const count=Math.min(habit.daysPerWeek,wk.length);for(let d=0;d<count;d++){const cb=document.createElement('div');cb.className='cb'+(getCheck(habit.id,wIdx,d)?' checked':'');cb.onclick=()=>{cb.classList.toggle('checked');setCheck(habit.id,wIdx,d,cb.classList.contains('checked'));updateProgress()};boxes.appendChild(cb)}const lbl=document.createElement('div');lbl.className='week-days-label';lbl.textContent=toAr(count)+' أيام';cell.appendChild(boxes);cell.appendChild(lbl);row.appendChild(cell)});const delCell=document.createElement('div');delCell.className='del-cell';const delBtn=document.createElement('button');delBtn.className='del-btn';delBtn.textContent='✕';delBtn.onclick=()=>{if(confirm(`حذف "${habit.name}"؟`)){habits=habits.filter(h=>h.id!==habit.id);saveData();renderHabits();updateProgress()}};delCell.appendChild(delBtn);row.appendChild(delCell);catDiv.appendChild(row)});container.appendChild(catDiv)});updateProgress()}
+function updateProgress(){const bars=document.getElementById('progressBars');bars.innerHTML='';const weeks=getWeeks(currentMonth);habits.forEach(habit=>{let total=0,done=0;weeks.forEach((wk,wIdx)=>{const c=Math.min(habit.daysPerWeek,wk.length);for(let d=0;d<c;d++){total++;if(getCheck(habit.id,wIdx,d))done++}});const pct=total?Math.round(done/total*100):0;const item=document.createElement('div');item.className='prog-item';item.innerHTML=`<div class="prog-label">${habit.icon} ${habit.name}</div><div class="prog-track"><div class="prog-fill" style="width:${pct}%"></div></div><div class="prog-pct">${pct}%</div>`;bars.appendChild(item)})}
+function renderAll(){document.getElementById('monthBadge').textContent='🌸 '+MONTHS[currentMonth].name+' ٢٠٢٦';renderMonthNav();renderWeekHeaders();renderHabits()}
+function buildEmojiPicker(){const picker=document.getElementById('emojiPicker');picker.innerHTML='';EMOJIS.forEach(e=>{const btn=document.createElement('div');btn.className='emoji-opt'+(e===selectedEmoji?' selected':'');btn.textContent=e;btn.onclick=()=>{selectedEmoji=e;document.querySelectorAll('.emoji-opt').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected')};picker.appendChild(btn)})}
+function openModal(id=null){editingId=id;if(id){const h=habits.find(x=>x.id===id);if(!h)return;document.getElementById('modalTitle').textContent='تعديل العادة';document.getElementById('habitNameInput').value=h.name;document.getElementById('habitCatInput').value=h.cat;document.getElementById('habitDaysInput').value=h.daysPerWeek;selectedEmoji=h.icon}else{document.getElementById('modalTitle').textContent='إضافة عادة جديدة';document.getElementById('habitNameInput').value='';document.getElementById('habitCatInput').value='morning';document.getElementById('habitDaysInput').value='7';selectedEmoji='⭐'}buildEmojiPicker();document.getElementById('modalOverlay').classList.add('open')}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');editingId=null}
+function saveHabit(){const name=document.getElementById('habitNameInput').value.trim();if(!name){alert('الرجاء إدخال اسم العادة');return}const cat=document.getElementById('habitCatInput').value,days=parseInt(document.getElementById('habitDaysInput').value);if(editingId){const h=habits.find(x=>x.id===editingId);if(h){h.name=name;h.cat=cat;h.daysPerWeek=days;h.icon=selectedEmoji}}else habits.push({id:'h_'+Date.now(),name,icon:selectedEmoji,cat,daysPerWeek:days});saveData();closeModal();renderHabits()}
+document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===this)closeModal()});
+loadData();renderAll();
+</script>
+</body>
+</html>
